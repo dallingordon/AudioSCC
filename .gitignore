@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+
+# Ignore data_files directory
+data/data_files/
+
+# Ignore experiment outputs
+outputs/
