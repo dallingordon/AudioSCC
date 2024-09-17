@@ -5,7 +5,7 @@ import torch
 from torch import optim, nn
 from torch.utils.data import DataLoader
 from data.dataloader import WaveformDatasetPreload
-from data.samplers import RandomConsecutiveSampler
+from data.sampler import RandomConsecutiveSampler
 from losses.losses import ConsecutiveDifferenceHigherOrderLossBatch, ConsecutiveDifferenceHigherOrderLoss
 from models import create_model
 from scripts.utils import get_max_required_length, binary_sequence_tensor
@@ -119,8 +119,9 @@ def main():
                 f"Epoch {epoch + 1}: Avg First 20 Loss: {avg_first_20_loss:.6f}, Avg Last 20 Loss: {avg_last_20_loss:.6f}\n")
 
         # Save model checkpoint in the experiment directory
-        torch.save(model.state_dict(), os.path.join(output_dir, f"checkpoint_epoch_{epoch + 1}.pth"))
-
+        if (epoch + 1) % 10 == 0:
+            torch.save(model.state_dict(), os.path.join(output_dir, f"checkpoint_epoch_{epoch + 1}.pth"))
+        torch.save(model.state_dict(), os.path.join(output_dir, f"{experiment_name}_latest.pth"))
     print("Training complete!")
 
 

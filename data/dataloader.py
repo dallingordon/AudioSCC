@@ -15,7 +15,8 @@ class WaveformDatasetPreload(Dataset):
         """
         self.directory = directory
         self.files = sorted([f for f in os.listdir(directory) if f.endswith('.wav')][:100], key=lambda x: int(x.split('.')[0]))
-        self.t_input = t_input[:max_len]  # Truncate t_input to the maximum required length
+        self.t_input = t_input # max is taken care of outside.
+
         self.terminal_pad = terminal_pad  # Fixed number of zeros to pad
         self.seq_max_len = seq_max_len  # Maximum number of integers in the filename sequence
         self.seq_t = seq_t[:seq_max_len]
