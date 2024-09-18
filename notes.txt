@@ -15,4 +15,6 @@ i need a resume to load latest and train starting there.
 i want to do param counts when i load the model.
 
 
-20 minutes per epoch with
+25 ish minutes per epoch with batch 100, consec 20 (so batch 2k for trainer) and 4 workers.
+
+with 8 workers (this was 4 cpus) i get:

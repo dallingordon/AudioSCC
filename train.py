@@ -29,6 +29,9 @@ def main():
     output_dir = os.path.join("outputs", experiment_name)
     os.makedirs(output_dir, exist_ok=True)  # Create directory if it doesn't exist
 
+    with open(os.path.join(output_dir, "training_log.txt"), "w") as config_log_file:
+        yaml.dump(config, config_log_file, default_flow_style=False)
+
     # Create dataloader
     data_directory = config['data']['data_directory']
     max_len = get_max_required_length(data_directory)
