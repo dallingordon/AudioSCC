@@ -4,3 +4,7 @@ on scc:
 module load python3/3.8.10
 module load pytorch/1.13.1  # or another version that fits your needs
 source venv/bin/activate
+
+lets try python3/3.10.12 ##this is looking good so far....
+
+

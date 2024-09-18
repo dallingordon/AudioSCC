@@ -24,7 +24,8 @@ class SeqEmbedding(nn.Module):
         embedded_seq = self.embedding(seq_indices)
         # Concatenate t_seq and embedded_seq along the last dimension
 
-
+        print(t_seq.device)
+        print(embedded_seq.device)
         x = torch.cat((t_seq, embedded_seq), dim=-1)
         # Pass through all the fully connected layers
         for layer in self.fc_layers:
