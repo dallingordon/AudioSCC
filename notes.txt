@@ -17,4 +17,5 @@ i want to do param counts when i load the model.
 
 25 ish minutes per epoch with batch 100, consec 20 (so batch 2k for trainer) and 4 workers.
 
-with 8 workers (this was 4 cpus) i get:
+with 8 workers (this was 4 cpus) i get: 15 ish yo!!!
+okay.  4 processers, 8 workers.  submitting.

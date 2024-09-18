@@ -1,6 +1,6 @@
 # Configuration for the training script
 
-experiment_name: 'my_experiment'  # Name of the experiment for saving and logging
+experiment_name: 'ssc_trial_1'  # Name of the experiment for saving and logging
 
 data:
   data_directory: 'data/digits_10_5k/digits_multiple'  # Path to the dataset directory
