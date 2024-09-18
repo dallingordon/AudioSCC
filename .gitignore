@@ -6,3 +6,6 @@ data/data_files/
 
 # Ignore experiment outputs
 outputs/
+
+# no notes
+notes.txt
