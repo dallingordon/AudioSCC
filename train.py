@@ -64,7 +64,7 @@ def main():
     dataloader = DataLoader(dataset, batch_sampler=sampler, num_workers=config['train']['num_workers'])
 
     # Initialize model, optimizer, and loss functions
-    model = create_model(config['model'])
+    model = create_model(config['model']).to(device)
     optimizer = optim.Adam(model.parameters(), lr=config['train']['learning_rate'])
 
     mse_loss_fn = nn.MSELoss()
