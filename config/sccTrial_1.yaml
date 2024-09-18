@@ -41,6 +41,6 @@ model:
 
   file_embedding:
     embedding_input_dim: 512        # Input dimension for file embeddings
-    bits: 16                         # From external
+    bits: 20                         # From external
     hidden_dim: 256                  # Dimension of hidden layers
     num_layers: 5                    # Number of fully connected layers
