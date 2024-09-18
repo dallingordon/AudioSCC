@@ -11,7 +11,7 @@ data:
   seq_vocab_len: 10                 # Vocabulary length (0-9 in this case)
 
 train:
-  num_epochs: 20                     # Number of epochs for training
+  num_epochs: 31                     # Number of epochs for training
   batch_size: 100                    # Size of each batch
   consecutive_size: 20              # Number of consecutive segments in each batch
   order: 3                          # Hyperparameter for loss functions
