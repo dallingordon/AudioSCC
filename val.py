@@ -127,8 +127,8 @@ def main():
     seq_t_input[len(file_name_integers):] = 0
 
     rep = t_input.shape[0]
-    seq_t_input = seq_t_input.unsqueeze(0).repeat(rep, 1, 1)
-    file_indexes = torch.tensor(padded_file_name)
+    seq_t_input = seq_t_input.unsqueeze(0).repeat(rep, 1, 1).to(device)
+    file_indexes = torch.tensor(padded_file_name).to(device)
     file_indexes = file_indexes.unsqueeze(0).repeat(rep, 1)
 
     print(file_indexes.shape, seq_t_input.shape, t_input.shape)
@@ -146,9 +146,9 @@ def main():
         end_idx = min((i + 1) * eval_batch_size, rep)
 
         # Slice the batch from each input
-        batch_file = file_indexes[start_idx:end_idx]
-        batch_input_seq_eval = seq_t_input[start_idx:end_idx]
-        batch_t_input = t_input[start_idx:end_idx]
+        batch_file = file_indexes[start_idx:end_idx].to(device)
+        batch_input_seq_eval = seq_t_input[start_idx:end_idx].to(device)
+        batch_t_input = t_input[start_idx:end_idx].to(device)
 
         # Run the model in evaluation mode (assuming the model is in eval mode already)
         with torch.no_grad():  # Disable gradient calculation for evaluation
