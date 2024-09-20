@@ -18,7 +18,20 @@ def main():
     args = parser.parse_args()
 
     # Load configuration
-    with open(args.config, 'r') as file:
+    config_path = args.config
+
+    # clean up config path, for convenience and so i don't have to remember
+    if config_path.startswith("/config/"):
+        config_path = config_path.lstrip('/')  # Remove the leading '/'
+    # Otherwise, if it doesn't start with 'configs/', prepend 'configs/'
+    elif not config_path.startswith("config/"):
+        config_path = os.path.join("config", config_path)
+
+    print(f"Using configuration file: {config_path}")
+
+
+    # Load configuration (assuming your config is a YAML file)
+    with open(config_path, 'r') as file:
         config = yaml.safe_load(file)
 
     # Setup device
@@ -42,7 +55,7 @@ def main():
     seq_vocab_len = config['data']['seq_vocab_len']
 
     t_input = binary_sequence_tensor(bits, max_len + target_pad)
-    seq_t_input = binary_sequence_tensor(seq_bits, seq_max_len + 1)
+    seq_t_input = binary_sequence_tensor(seq_bits, seq_max_len )
 
     # Create the dataset
     dataset = WaveformDatasetPreload(

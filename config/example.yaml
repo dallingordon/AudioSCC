@@ -25,12 +25,12 @@ model:
   type: 'seq_encoding_seq_pred'      # Specify the model type
   seq_embedding:
     seq_bits: 4                     # Must match seq_input
-    vocab_len: 11                   # Vocabulary length for embeddings.  include padding token.
+    vocab_len: 11                   # Vocabulary length for embeddings.  include padding token. should be derived
     embedding_dim: 128              # Dimension of the embedding
     hidden_dim: 64                   # Dimension of hidden layers
     output_dim: 256                  # Output dimension of the embedding
     num_layers: 5                    # Number of fully connected layers
-    padding_idx: 10                  # Padding index for the embedding
+    padding_idx: 10                  # Padding index for the embedding, should also be derived
 
   seq_input:
     seq_bits: 4                     # Must match seq_embedding

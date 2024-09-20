@@ -19,3 +19,35 @@ i want to do param counts when i load the model.
 
 with 8 workers (this was 4 cpus) i get: 15 ish yo!!!
 okay.  4 processers, 8 workers.  submitting.
+
+
+what if you slowly decreased the lr.  look at how it starts and ends the epoch.
+epoch_initial_loss = Li, epech_terminal_loss = Lt
+
+Li will usually be higher than Lt.  Lt is often slightly lower than the next Li.  its like, intra epoch overfitting.
+but if the lr is right then sometimes what it learns is good for the next stuff.  well, that atleast is extrapolatable data
+extrapolatable learning is when a prediction on one batch is good for the data that follows it.  its random, so statistically there is
+a good chance (correlation of causation?) that that learning was particularly good.  so, how do you exploit that? speed up the lr? lower it?
+does that mean we like the neighborhood so slow down to enjoy it?
+or raise it? I don't think it is raise it i think it is lower it.   so if you ever get one where the lr goes to zero, well you fucking did it
+i wanna try this shit.
+give it a max bound? oooh, or do you random? choose a lr at random in a range.
+ if the proximal is good, lower the lr a tiny bit if Lt is higher than Li on the next measurement.
+ if it isn't, sample with that rate as the mean. and have the sd decrease proportionally to the lr as well
+ .  so if it goes up it fluctuates
+ but if it goes down, it means you are learning stuff that is applicable.
+ and if you get them all it goes to zero.
+ will this let you get to a global? no it would be a local.
+ so i guess we see what shape the loss landscape is.  did i make one that has one global and no other local?
+
+ i like this quite a bit
+
+
+frechet audio distance.
+fad score? works on a group, take some real audio recordings, and put it through a network,
+compare the distance.
+singleton noise ratios? peak signal to noise ratio?
+
+
+fid inception distance?
+
