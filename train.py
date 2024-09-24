@@ -83,6 +83,15 @@ def main():
     model = create_model(config['model']).to(device)
     optimizer = optim.Adam(model.parameters(), lr=config['train']['learning_rate'])
 
+    # Optional: Initialize learning rate scheduler
+    scheduler = None
+    if 'scheduler' in config['train']:
+        scheduler_config = config['train']['scheduler']
+        if scheduler_config['type'] == "StepLR":
+            scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=scheduler_config['step_size'], gamma=scheduler_config['gamma'])
+        elif scheduler_config['type'] == "ExponentialLR":
+            scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=scheduler_config['gamma'])
+
     mse_loss_fn = nn.MSELoss()
     bce_loss_fn = nn.BCELoss()
     cdifb_loss = ConsecutiveDifferenceHigherOrderLossBatch(consecutive_size, order=consec_loss_order)
@@ -121,6 +130,9 @@ def main():
             optimizer.zero_grad()
             total_loss.backward()
             optimizer.step()
+
+        if scheduler is not None:
+            scheduler.step()
 
         avg_first_20_loss = sum(first_20_losses) / len(first_20_losses) if first_20_losses else 0
         avg_last_20_loss = sum(last_20_losses) / len(last_20_losses) if last_20_losses else 0

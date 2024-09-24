@@ -51,3 +51,14 @@ singleton noise ratios? peak signal to noise ratio?
 
 fid inception distance?
 
+
+
+9/24
+i want a scheduler and a beefy model.  I am getting variation.  it is generation more noise for longer sequences, its not intelligible, but some i hear like "voice"
+
+scheduler is easiest.
+oh, that was scc 1.
+
+model 1 is the bigger guy.
+running val:
+model 1 sucked.  only got 14 epcohs.   how much time did i request?

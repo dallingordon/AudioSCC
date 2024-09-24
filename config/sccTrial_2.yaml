@@ -1,0 +1,50 @@
+# Configuration for the training script
+
+experiment_name: 'scc_trial_2'  # Name of the experiment for saving and logging
+
+data:
+  data_directory: 'data/digits_10_5k/digits_multiple'  # Path to the dataset directory
+  target_pad: 20                   # Number of zeros to pad at the end of each audio file
+  bits: 20                          # Number of bits for t_input
+  seq_bits: 5                       # Number of bits for seq_t
+  seq_max_len: 10                   # Maximum length of the input sequence in tokens
+  seq_vocab_len: 10                 # Vocabulary length (0-9 in this case)
+
+train:
+  num_epochs: 55                     # Number of epochs for training
+  batch_size: 100                    # Size of each batch
+  consecutive_size: 20              # Number of consecutive segments in each batch
+  order: 3                          # Hyperparameter for loss functions
+  bce_weight: 0.1                   # Weight for binary cross-entropy loss
+  cdif_weight: 1.6                  # Weight for consecutive difference loss
+  cdif_batch_weight: 0.4            # Weight for batch consecutive difference loss
+  learning_rate: 0.0001             # Learning rate for the optimizer
+  num_workers: 8                    # Number of workers for data loading
+  scheduler:
+    type: "StepLR"  # Options: "StepLR", "ExponentialLR", etc.
+    step_size: 2  # Only required for StepLR
+    gamma: 0.9
+
+model:
+  type: 'seq_encoding_seq_pred'      # Specify the model type
+  seq_embedding:
+    seq_bits: 5                     # Must match seq_input
+    vocab_len: 11                   # Vocabulary length for embeddings.  include padding token.
+    embedding_dim: 128              # Dimension of the embedding
+    hidden_dim: 256                   # Dimension of hidden layers
+    output_dim: 256                  # Output dimension of the embedding
+    num_layers: 5                    # Number of fully connected layers
+    padding_idx: 10                  # Padding index for the embedding
+
+  seq_input:
+    seq_bits: 5                     # Must match seq_embedding
+    input_embedding_dim: 256        # Must match output_dim of seq_embedding
+    hidden_dim: 256                   # Dimension of hidden layers
+    output_dim: 512                  # Output dimension of the seq input
+    num_layers: 5                    # Number of fully connected layers
+
+  file_embedding:
+    embedding_input_dim: 512        # Input dimension for file embeddings
+    bits: 20                         # From external
+    hidden_dim: 256                  # Dimension of hidden layers
+    num_layers: 5                    # Number of fully connected layers

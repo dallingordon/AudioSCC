@@ -1,4 +1,4 @@
-experiment_name: 'model_1'  # Name of the experiment for saving and logging
+experiment_name: 'model_1_scheduler'  # Name of the experiment for saving and logging
 
 data:
   data_directory: 'data/digits_10_5k/digits_multiple'  # Path to the dataset directory
@@ -18,6 +18,10 @@ train:
   cdif_batch_weight: 0.4            # Weight for batch consecutive difference loss
   learning_rate: 0.001             # Learning rate for the optimizer
   num_workers: 8                    # Number of workers for data loading
+  scheduler:
+    type: "StepLR"  # Options: "StepLR", "ExponentialLR", etc.
+    step_size: 2  # Only required for StepLR
+    gamma: 0.9
 
 model:
   type: 'model_1'      # Specify the model type
