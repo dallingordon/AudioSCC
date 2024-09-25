@@ -1,5 +1,6 @@
 from .models import SeqEncodingSeqPred  # Import your models here
 from.layers_2 import Model1
+from .SwissArmyModel import SeqModel
 def create_model(config):
     model_type = config['type']
 
@@ -7,5 +8,7 @@ def create_model(config):
         return SeqEncodingSeqPred(config)
     if model_type == 'model_1':
         return Model1()
+    if model_type == 'seq_model':
+        return SeqModel(config)
     else:
         raise ValueError(f"Unknown model type: {model_type}")

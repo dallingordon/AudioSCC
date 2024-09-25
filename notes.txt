@@ -62,3 +62,15 @@ oh, that was scc 1.
 model 1 is the bigger guy.
 running val:
 model 1 sucked.  only got 14 epcohs.   how much time did i request?
+
+
+decoder is built, untested
+
+skip connections might be a good idea.  especially in the decoder.  what if each imput embedding was the same dim until the output stack.
+that is a good later idea i think
+
+imagine residuals in the encoder as well.  with the sum, also, the time layers being shared across layers is interesting.
+
+swiss army local worked.  now beef it up baby
+
+next step might be --resume functionality.

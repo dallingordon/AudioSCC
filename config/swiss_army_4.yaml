@@ -1,0 +1,49 @@
+# Configuration for the training script
+
+experiment_name: 'swiss_army_4'  # Name of the experiment for saving and logging
+
+data:
+  data_directory: 'data/digits_10_5k/digits_multiple'  # Path to the dataset directory
+  target_pad: 20                   # Number of zeros to pad at the end of each audio file
+  bits: 20                          # Number of bits for t_input
+  seq_bits: 5                       # Number of bits for seq_t
+  seq_max_len: 10                   # Maximum length of the input sequence in tokens
+  seq_vocab_len: 10                 # Vocabulary length (0-9 in this case)
+
+train:
+  num_epochs: 55                     # Number of epochs for training
+  batch_size: 100                    # Size of each batch
+  consecutive_size: 20              # Number of consecutive segments in each batch
+  order: 3                          # Hyperparameter for loss functions
+  bce_weight: 0.1                   # Weight for binary cross-entropy loss
+  cdif_weight: 1.6                  # Weight for consecutive difference loss
+  cdif_batch_weight: 0.4            # Weight for batch consecutive difference loss
+  learning_rate: 0.0001             # Learning rate for the optimizer
+  num_workers: 8                    # Number of workers for data loading
+  scheduler:
+    type: "StepLR"  # Options: "StepLR", "ExponentialLR", etc.
+    step_size: 2  # Only required for StepLR
+    gamma: 0.9
+
+model:
+  type: 'seq_model'      # Specify the model type
+  t_seq_bits: 5
+  t_bits: 20
+  t_seq_len: 10
+  encoder:
+    t_layer_dim: 20
+    t_num_layers: 1
+    fc_layers: 3
+    encoder_layers: 10
+    one_hot_vocab_len: 10
+    one_hot_embedding_dim: 100
+  decoder:
+      t_layer_dim: 20
+      t_num_layers: 1
+      fc_layers: 5
+      decoder_layers: 5
+  output:
+    mse_output_layers: 3
+    mse_dim: 50
+    bce_output_layers: 3
+    bce_dim: 50
