@@ -12,13 +12,13 @@ data:
 
 train:
   num_epochs: 55                     # Number of epochs for training
-  batch_size: 100                    # Size of each batch
+  batch_size: 200                    # Size of each batch
   consecutive_size: 20              # Number of consecutive segments in each batch
   order: 3                          # Hyperparameter for loss functions
   bce_weight: 0.1                   # Weight for binary cross-entropy loss
   cdif_weight: 1.6                  # Weight for consecutive difference loss
   cdif_batch_weight: 0.4            # Weight for batch consecutive difference loss
-  learning_rate: 0.0001             # Learning rate for the optimizer
+  learning_rate: 0.001             # Learning rate for the optimizer
   num_workers: 8                    # Number of workers for data loading
   scheduler:
     type: "StepLR"  # Options: "StepLR", "ExponentialLR", etc.

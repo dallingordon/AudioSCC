@@ -12,7 +12,7 @@ data:
 
 train:
   num_epochs: 55                     # Number of epochs for training
-  batch_size: 100                    # Size of each batch
+  batch_size: 200                    # Size of each batch
   consecutive_size: 20              # Number of consecutive segments in each batch
   order: 3                          # Hyperparameter for loss functions
   bce_weight: 0.1                   # Weight for binary cross-entropy loss
@@ -32,18 +32,18 @@ model:
   t_seq_len: 10
   encoder:
     t_layer_dim: 20
-    t_num_layers: 1
-    fc_layers: 10
-    encoder_layers: 10
+    t_num_layers: 0
+    fc_layers: 5
+    encoder_layers: 3
     one_hot_vocab_len: 10
     one_hot_embedding_dim: 100
   decoder:
       t_layer_dim: 20
-      t_num_layers: 1
+      t_num_layers: 0
       fc_layers: 5
-      decoder_layers: 5
+      decoder_layers: 2
   output:
-    mse_output_layers: 3
+    mse_output_layers: 1
     mse_dim: 50
-    bce_output_layers: 3
+    bce_output_layers: 1
     bce_dim: 50

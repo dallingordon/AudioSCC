@@ -32,16 +32,16 @@ model:
   t_seq_len: 10
   encoder:
     t_layer_dim: 20
-    t_num_layers: 1
+    t_num_layers: 0
     fc_layers: 3
-    encoder_layers: 5
+    encoder_layers: 2
     one_hot_vocab_len: 10
     one_hot_embedding_dim: 100
   decoder:
       t_layer_dim: 20
-      t_num_layers: 1
-      fc_layers: 5
-      decoder_layers: 5
+      t_num_layers: 0
+      fc_layers: 3
+      decoder_layers: 1
   output:
     mse_output_layers: 3
     mse_dim: 50
