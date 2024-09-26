@@ -74,3 +74,13 @@ imagine residuals in the encoder as well.  with the sum, also, the time layers b
 swiss army local worked.  now beef it up baby
 
 next step might be --resume functionality.
+
+scc trial 2 has some different sounding stuff, but it aint english.  i can hear cadence to a large degree.
+
+model 1 looks broken.  tragic.
+
+it also didn't finish.  up the times yo.
+
+some of these seem way slow.  mess with num workers i think
+
+
