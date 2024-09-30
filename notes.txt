@@ -83,4 +83,7 @@ it also didn't finish.  up the times yo.
 
 some of these seem way slow.  mess with num workers i think
 
+ok, i just looked at my code again and realized i was only summing after the initial layer in the encoder, and the final.  so fixed that.
+
+running 4 of my configs right now.  i want to see training again.
 

@@ -208,9 +208,7 @@ class SeqModel(nn.Module):
         layers.append(nn.Linear(current_dim, 1))  # Single output dimension
 
         # Final activation
-        if final_activation == 'relu':
-            layers.append(nn.ReLU())
-        elif final_activation == 'sigmoid':
+        if final_activation == 'sigmoid':
             layers.append(nn.Sigmoid())
 
         return nn.Sequential(*layers)
