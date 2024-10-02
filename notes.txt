@@ -87,3 +87,56 @@ ok, i just looked at my code again and realized i was only summing after the ini
 
 running 4 of my configs right now.  i want to see training again.
 
+messed with the summing, see if that helps, but didn't alone
+the final relu on the mse output stack i think caused issues.  on my single digit set fixing that made it spit out real looking predictions, not all zero
+
+train the encoder slower? it is getting way more data per forward pass, so yeah, slow it down?
+
+the duplication? look at those gradients.  i bet they get way big.  i may need to like, divide by the max len each time.
+see if they are zeroing like i expect too.
+
+
+from swissarmy import SeqModel
+config = {
+    't_seq_bits': seq_bits,  # Example value for the input bit size
+    't_seq_len': seq_max_len,    # Example value for the sequence length
+    't_bits': bits,      # Example value for the bits used in the decoder
+
+    'encoder': {
+        't_layer_dim': 0,               # Example hidden layer dimension for encoder
+        't_num_layers': 0,                # Example number of layers in the encoder's initial layer
+        'fc_layers': 4,                   # Example number of fully connected layers in the encoder
+        'encoder_layers': 2,              # Example number of encoder layers
+        'one_hot_vocab_len': 10,          # Vocabulary size for one-hot encoding
+        'one_hot_embedding_dim': 10       # Embedding dimension for one-hot encoding
+    },
+
+    'decoder': {
+        't_layer_dim': 0,                # Example hidden layer dimension for decoder
+        't_num_layers': 0,                # Example number of layers in the decoder's initial layer
+        'fc_layers': 4,                   # Example number of fully connected layers in the decoder
+        'decoder_layers': 1                # Example number of decoder layers
+    },
+
+    'output': {
+        'mse_output_layers': 2,           # Number of layers in the MSE output head
+        'mse_dim': 64,                     # Hidden dimension for the MSE output head
+        'bce_output_layers': 2,            # Number of layers in the BCE output head
+        'bce_dim': 64                      # Hidden dimension for the BCE output head
+    }
+}
+
+That is working with swiss army.  "working", it is training.  i need to add my scheduler i think but i want it more hands on
+i am thinking about doing it with a gpu interactively
+
+does it make sense to have the bce portion off of the encoder? interesting.  it might actually.  for training purposes
+
+the earliest layer gradients are increasing??? no, that was very biased.  looked at more and that wasn't the case
+they are however way low.  not sure how the repeat is operating on them
+
+turning up the encoder layers maybe helped training stability? messing wiht that
+
+mvoing the notebook onto the scc
+collapsed again.  weird
+
+
