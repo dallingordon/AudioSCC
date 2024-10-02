@@ -9,3 +9,6 @@ outputs/
 
 # no notes
 notes.txt
+
+.ipynb_checkpoints
+
