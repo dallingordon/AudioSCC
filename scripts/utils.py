@@ -37,3 +37,16 @@ def binary_sequence_tensor(num_bits, length):
     binary_tensor = ((t_values.unsqueeze(1) >> torch.arange(num_bits)) & 1).float()
     binary_tensor[binary_tensor == 0] = -1
     return binary_tensor
+
+
+def generate_sine_tensor(num_bits, length):
+    # Create an array of integers from 0 to length - 1
+    t = np.arange(length)
+    # Generate the sine waves for each bit
+    sine_tensor = np.zeros((length, num_bits))  # Initialize the tensor
+
+    for i in range(num_bits):
+        frequency = (np.pi / (2 ** i))  # Calculate frequency based on the number of bits
+        sine_tensor[:, i] = np.sin(frequency * (t + 0.5))  # Fill the tensor with sine values
+
+    return sine_tensor

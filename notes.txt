@@ -140,3 +140,107 @@ mvoing the notebook onto the scc
 collapsed again.  weird
 
 
+module load python3/3.10.12
+module load pytorch/1.13.1
+
+trying to get the venv working in interactive.
+https://www.bu.edu/tech/support/research/software-and-programming/common-languages/python/python-editing/jupyter/
+
+works!!! load both modules and the venv_nb when you requesst in interacti e
+
+got it
+i had to mess with my loss functions to put them on device, but it was minor and yeah.
+request more cpus tomorrow
+
+i think i want to set up swiss army small and see what can learn.  what lrs, what configs.
+those should run quick too.
+good work today.  you did some solid work.
+i know you don't feel like it sometimes, but you got stuff done, you planned, you executed.  we dispelled some unkonw?
+ikd.  i named some unknown and made tools to investigate it.
+
+with my 2 digit thing, i might just start testing lots of architectures.
+res blocks
+hyper params.
+i think i am nas now
+not neural, just as
+
+digit_dataset in CSN (local) has multiple digits.
+
+
+kulis meeting 10/3
+norm layer?
+batch norm.  keeps gradients bounded
+
+shouldnt vanish until you hit
+
+look at all the layers.
+
+good to identify end backwards, if its summation, how to deal with that?
+
+do i get the "vanishing gradients" with 2?
+
+t encoding, if you scaled that down, what would be the impact.
+
+from gradient perspective, normalize the inputs.  that is a non normalized input.
+what is the range.  if there is a scaling issue.
+
+in a transformer we have a positional embedding, but somehow it works.  learned embedding.  works just as well.
+
+4 workers on my scc notebook made it lightning fast yo
+
+the encoder is going to go a lot of the complex work.  the decoder i have shown if it is complex enough can make audio.
+
+so, what does that imply? big encoder? should one learn faster or slower? i guess faster means more reactive? i think the encoder
+learns faster?
+
+wrote this in the swiss army model doc, but one of the big models (lots of encoder and decoder layers, lots of fc layers, tall output head)
+when inited output all zeros.  my guess is that isn't gonna train at all.  look into init.
+
+to train long range stuff, could you just do nonsense words at the beginning and then actual logical sentences at the end? like
+i think it would be part of the training set up, i think this is way down the road, but just a thought.
+you want to be able to say the sentence at any time in t so if you did oh sequence in, audio out, "quick brown fox" but with random
+words before it, random after, bla bla.
+
+oooh, might make sense to move the digits around. like, when you train.  that is a solid idea now i think about it.  make it predict 03
+but with a few extra blank spaces at the beginning.  will mess
+
+i really don't want to make it dependent on the previous time step.  buuut, what if it just took in 2 ts.  that could be interesting.
+will consider. i like this.  i think i might be able to do it sort of for free with my dataloader, becuase of my differences thing
+if it has both can it learn time as directional? i'm really warming up to it.  echo chamber but yeah.
+
+
+10/7
+"good_big_new_t.pth" saved last friday.  has some good speach.  i am training it more, slowly, reducing lr.
+
+so, it looks like the bce is super low, but what i am thinking is only having it train the bce stack.  it looks useless right now
+i actually just turned it off.  lets just get speach
+turned off mse too.
+
+"digitssamodel_more.pth" is the training without bce and mse (after the initial bit) it doesn't seem to be much improved.
+
+legendre t uses legendre polys, same model as above.  i have messed with losses tho.  will continue to do that
+
+i am thinking about stitching the audio together.  it only has one audio file for each digit and stitches them.  chat with kulis.  i wonder
+if that is what the thing is doing.  it learns 9 well becuase it is in the same spot.
+
+the other is mess with the spot.  something that interacts in an embedding sort of way that can change the decoder embedding.
+i have seen an embedding and my t make a long audio file.  what if it could learn to swap those out.  i might already have this with multiple decoders.
+maybe that dim is too big? it has so much neuronal space that it isn't forced to learn dense information, it tries to just memorize?
+
+from my sketch book, what can i condition t on.  before i use it can i pass it through some layers and make changes to t?
+oooooh, that is interesting.  i need a model that can learn an additive thing to t and move it around.  then can i learn an audio
+segment wherever it is in time? there are inflections and stuff too, how do i deal with those?
+my 2 t inputs is a thought.
+can you learn a function of t and seq embedding to add to itself (t) before concatenating with the imput emb? to move around in time? do this in the decoder?
+
+
+of course vary stuff, but, lets try a small model, 2 encoder layers, and lets up the decoder layers?
+
+Legendre T and 0.5 for both cdif and cdif_batch looks okay.  started at 0.001 for 5 epochs
+ok, so my original t makes sure to start at the nyquist frequency, this goes the opposite direction.  i need more bits! it doesn't have the highest freq stuff
+
+all 0
+0.0001 looks like its doing something.
+
+
+
