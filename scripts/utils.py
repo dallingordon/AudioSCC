@@ -1,6 +1,7 @@
 import os
 import torch
 from scipy.io import wavfile
+import numpy as np
 
 
 def get_max_required_length(dir):
@@ -47,6 +48,6 @@ def generate_sine_tensor(num_bits, length):
 
     for i in range(num_bits):
         frequency = (np.pi / (2 ** i))  # Calculate frequency based on the number of bits
-        sine_tensor[:, i] = np.sin(frequency * (t + 0.5))  # Fill the tensor with sine values
+        sine_tensor[:, i] = np.cos(frequency * (t))  # Fill the tensor with sine values
 
     return sine_tensor
