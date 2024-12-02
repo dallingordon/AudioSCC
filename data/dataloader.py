@@ -2,7 +2,7 @@ import os
 import torch
 from torch.utils.data import Dataset
 from scipy.io import wavfile  # If you're using scipy for reading .wav files
-
+import numpy as np
 
 class WaveformDatasetPreload(Dataset):
     def __init__(self, directory, t_input, max_len, terminal_pad, seq_vocab_len, seq_max_len, seq_t):
@@ -94,13 +94,16 @@ class WaveformDatasetPreload(Dataset):
 
         # Return the preprocessed padded file name integers for the given file_idx
         padded_file_name_integers = self.padded_file_name_integers[file_idx]
-
+        
         num_padding = (padded_file_name_integers == self.seq_max_len).sum().item()
 
         # Retain only non-padded values in seq_t and zero out the rest
         retained_len = len(self.seq_t) - num_padding
-        seq_t_adjusted = self.seq_t.clone()  # Clone to avoid modifying the original tensor
+        if isinstance(self.seq_t, np.ndarray):
+            seq_t_adjusted = torch.tensor(self.seq_t).clone()
+        else:
+            seq_t_adjusted = self.seq_t.clone()  # Clone to avoid modifying the original tensor
         if retained_len > 0:
             seq_t_adjusted[retained_len:] = 0  # Zero out the right-padded elements
-
-        return wav_data, t_step, target, padded_file_name_integers, seq_t_adjusted
+        #print(wav_data.dtype, t_step.dtype)
+        return wav_data.to(torch.long), t_step.to(torch.long), target.to(torch.long), padded_file_name_integers.to(torch.long), seq_t_adjusted.to(torch.long)

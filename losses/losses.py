@@ -56,3 +56,43 @@ class ConsecutiveDifferenceHigherOrderLoss(nn.Module):
             result += torch.mean((pred_dif - target_dif) ** 2) / self.order
         return result
 
+class PairwiseDifferenceLoss(nn.Module):
+    def __init__(self, consecutive_size, device, scale_up=100_000):
+        super(PairwiseDifferenceLoss, self).__init__()
+        self.consecutive_size = consecutive_size
+        self.device = device
+        self.scale_up  = scale_up
+
+    def forward(self, data, labels):
+        
+        ####YOU HAVE TO MAKE THIS batch by consec!!
+        data = data.view(-1, self.consecutive_size)
+        labels = labels.view(-1, self.consecutive_size)
+        batch_size = data.shape[0]
+        #print(data.shape, labels.shape)
+        # Expand the tensor to compute pairwise differences
+        data_expanded1 = data.unsqueeze(2).expand(batch_size, self.consecutive_size, self.consecutive_size)
+        data_expanded2 = data.unsqueeze(1).expand(batch_size, self.consecutive_size, self.consecutive_size)
+        
+        # Compute differences between data and labels
+        data_differences = (data_expanded1 - data_expanded2)
+        #print(data_expanded1 == data_expanded2)
+        #print(data_expanded1,data_expanded2, data_differences)
+        # Compute differences with the labels
+        labels_expanded1 = labels.unsqueeze(2).expand(batch_size, self.consecutive_size, self.consecutive_size)
+        labels_expanded2 = labels.unsqueeze(1).expand(batch_size, self.consecutive_size, self.consecutive_size)
+        label_differences = (labels_expanded1 - labels_expanded2)
+        #print(labels_expanded1,labels_expanded1, label_differences)
+        
+        #mask = torch.triu(torch.ones(batch_size, self.consecutive_size, self.consecutive_size), diagonal=1).to(self.device)
+        
+        differences = (( data_differences*self.scale_up - label_differences*self.scale_up)**2)
+        #print(differences.shape)
+        # Apply a mask to ignore upper triangle
+        
+       
+        #print(differences)
+        # Compute the mean to return a scalar loss
+        loss = differences.mean()
+        
+        return loss

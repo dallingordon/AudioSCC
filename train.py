@@ -6,9 +6,9 @@ from torch import optim, nn
 from torch.utils.data import DataLoader
 from data.dataloader import WaveformDatasetPreload
 from data.sampler import RandomConsecutiveSampler
-from losses.losses import ConsecutiveDifferenceHigherOrderLossBatch, ConsecutiveDifferenceHigherOrderLoss
+from losses.losses import ConsecutiveDifferenceHigherOrderLossBatch, ConsecutiveDifferenceHigherOrderLoss,PairwiseDifferenceLoss
 from models import create_model
-from scripts.utils import get_max_required_length, binary_sequence_tensor
+from scripts.utils import get_max_required_length, binary_sequence_tensor, generate_sine_tensor
 from tqdm import tqdm
 
 def main():
@@ -54,9 +54,9 @@ def main():
     seq_max_len = config['data']['seq_max_len']
     seq_vocab_len = config['data']['seq_vocab_len']
 
-    t_input = binary_sequence_tensor(bits, max_len + target_pad)
-    seq_t_input = binary_sequence_tensor(seq_bits, seq_max_len )
-
+    t_input = generate_sine_tensor(bits, max_len + target_pad)
+    seq_t_input = generate_sine_tensor(seq_bits, seq_max_len )
+    #print(t_input.dtype,'tinput')
     # Create the dataset
     dataset = WaveformDatasetPreload(
         directory=data_directory,
@@ -72,6 +72,8 @@ def main():
     batch_size = config['train']['batch_size']
     consecutive_size = config['train']['consecutive_size']
     consec_loss_order = config['train']['order']
+    mse_weight = config['train']['mse_weight'] ### added this
+    pd_weight = config['train']['pd_weight']
     bce_weight = config['train']['bce_weight']
     cdif_weight = config['train']['cdif_weight']
     cdif_batch_weight = config['train']['cdif_batch_weight']
@@ -81,6 +83,7 @@ def main():
 
     # Initialize model, optimizer, and loss functions
     model = create_model(config['model']).to(device)
+    print(model)
     optimizer = optim.Adam(model.parameters(), lr=config['train']['learning_rate'])
 
     # Optional: Initialize learning rate scheduler
@@ -96,6 +99,7 @@ def main():
     bce_loss_fn = nn.BCELoss()
     cdifb_loss = ConsecutiveDifferenceHigherOrderLossBatch(consecutive_size, order=consec_loss_order)
     cdif_loss = ConsecutiveDifferenceHigherOrderLoss(consecutive_size, order=consec_loss_order)
+    pd_loss = PairwiseDifferenceLoss(consecutive_size,device)
 
     # Training loop
     for epoch in range(num_epochs):
@@ -106,19 +110,22 @@ def main():
 
         for i, batch in enumerate(tqdm(dataloader, desc=f"Epoch {epoch + 1}/{num_epochs}")):
             wav_data, t_step, target, file_idx, seq_inputs = batch
-            wav_data, t_step, target, file_idx, seq_inputs = wav_data.to(device), t_step.to(device), target.to(device), file_idx.to(device), seq_inputs.to(device)
+            
+            wav_data, t_step, target, file_idx, seq_inputs = wav_data.to(device).to(torch.float32), t_step.to(device), target.to(device).to(torch.float32), file_idx.to(device), seq_inputs.to(device)
             #testing pull
             # Forward pass
             bce_output, mse_output = model(seq_inputs, file_idx, t_step)
 
             # Compute losses
+            #(int, float, int)
+            
             mse_loss = mse_loss_fn(mse_output * target, wav_data)
             bce_loss = bce_loss_fn(bce_output, target)
             cdif = cdif_loss(mse_output * target, wav_data)
             cdif_b = cdifb_loss(mse_output * target, wav_data)
-
+            pd = pd_loss(mse_output * target, wav_data)
             # Combine losses
-            total_loss = mse_loss + bce_weight * bce_loss + cdif_weight * cdif + cdif_batch_weight * cdif_b
+            total_loss = mse_weight * mse_loss + bce_weight * bce_loss + cdif_weight * cdif + cdif_batch_weight * cdif_b + pd_weight * pd
 
             if i < 20:
                 first_20_losses.append(total_loss.item())
@@ -139,7 +146,7 @@ def main():
 
         # Print progress for each epoch
         print(
-            f"Epoch {epoch + 1}/{num_epochs} MSE: {mse_loss.item():.6f} BCE: {bce_loss.item():.6f} CDIF: {cdif.item():.6f} CDIF_B: {cdif_b.item():.6f} Total Loss: {total_loss.item():.8f}")
+            f"Epoch {epoch + 1}/{num_epochs} MSE: {mse_loss.item():.6f} BCE: {bce_loss.item():.6f} CDIF: {cdif.item():.6f} CDIF_B: {cdif_b.item():.6f} PD: {pd.item():.6f}  Total Loss: {total_loss.item():.8f}")
 
         # Log the averages to the log file
         with open(os.path.join(output_dir, "training_log.txt"), "a") as log_file:

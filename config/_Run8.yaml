@@ -1,0 +1,50 @@
+experiment_name: '_run_8'  # Name of the experiment for saving and logging
+
+data:
+  data_directory: 'data/digits_two'  # Path to the dataset directory
+  target_pad: 40                   # Number of zeros to pad at the end of each audio file
+  bits: 30                          # Number of bits for t_input
+  seq_bits: 10                       # Number of bits for seq_t
+  seq_max_len: 2                   # Maximum length of the input sequence in tokens
+  seq_vocab_len: 10                 # Vocabulary length (0-9 in this case)
+
+train:
+  num_epochs: 100                     # Number of epochs for training
+  batch_size: 500                    # Size of each batch
+  consecutive_size: 50              # Number of consecutive segments in each batch
+  order: 3                         # Hyperparameter for loss functions
+  mse_weight: 0.0                           
+  bce_weight: 0.0                   # Weight for binary cross-entropy loss
+  cdif_weight: 0.0                  # Weight for consecutive difference loss
+  cdif_batch_weight: 0.0            # Weight for batch consecutive difference loss
+  pd_weight: 1.0
+  learning_rate: 0.0001             # Learning rate for the optimizer
+  num_workers: 8                    # Number of workers for data loading
+  #scheduler:
+  #  type: "StepLR"  # Options: "StepLR", "ExponentialLR", etc.
+  #  step_size: 2  # Only required for StepLR
+  #  gamma: 0.9
+
+model:
+  type: 'res_pred'      # Specify the model type.  res_pred is the newest one that has residuals.
+  t_seq_bits: 10        #these 3 have to match from above.
+  t_bits: 30
+  t_seq_len: 2
+  encoder:
+    t_layer_dim: 0
+    t_num_layers: 0
+    fc_layers: 5
+    encoder_layers: 5
+    one_hot_vocab_len: 10
+    one_hot_embedding_dim: 100
+    output_dim: 128    #This is only for whats it called, the resPred model.
+  decoder:
+      t_layer_dim: 0
+      t_num_layers: 0
+      fc_layers: 10
+      decoder_layers: 1
+  output:
+    mse_output_layers: 2
+    mse_dim: 256
+    bce_output_layers: 2
+    bce_dim: 256

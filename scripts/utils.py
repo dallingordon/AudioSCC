@@ -50,4 +50,4 @@ def generate_sine_tensor(num_bits, length):
         frequency = (np.pi / (2 ** i))  # Calculate frequency based on the number of bits
         sine_tensor[:, i] = np.cos(frequency * (t))  # Fill the tensor with sine values
 
-    return sine_tensor
+    return torch.tensor(sine_tensor)
