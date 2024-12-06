@@ -2,6 +2,7 @@ import os
 import torch
 from scipy.io import wavfile
 import numpy as np
+import math
 
 
 def get_max_required_length(dir):
@@ -51,3 +52,38 @@ def generate_sine_tensor(num_bits, length):
         sine_tensor[:, i] = np.cos(frequency * (t))  # Fill the tensor with sine values
 
     return torch.tensor(sine_tensor)
+
+
+def generate_sine_encodings(d_model, seq_len):
+    """
+    https://medium.com/@manishnegi101/understanding-positional-encoding-in-transformers-5fa6378878fc
+    i took that and just made it output the encodings as a tensor.  
+    Generates positional encodings as a tensor.
+
+    Args:
+        d_model (int): Dimension of the embedding vector.
+        seq_len (int): Length of the sequence.
+
+    Returns:
+        torch.Tensor: Positional encoding of shape (seq_len, d_model).
+    """
+    # Create matrix of shape (seq_len, d_model)
+    pe = torch.zeros(seq_len, d_model)
+    pos = torch.arange(0, seq_len, dtype=torch.float).unsqueeze(1)  # Shape (seq_len, 1)
+    
+    # Compute the scaling factors for sine and cosine
+    div = torch.exp(torch.arange(0, d_model, 2, dtype=torch.float) * (-math.log(10000.0) / d_model))
+    
+    # Apply sine and cosine to even and odd indices
+    pe[:, 0::2] = torch.sin(pos * div)  # Apply sine to even indices
+    pe[:, 1::2] = torch.cos(pos * div)  # Apply cosine to odd indices
+    
+    return pe
+
+
+FUNCTION_MAP = {
+    'generate_sine_tensor': generate_sine_tensor,
+    'generate_sine_encodings': generate_sine_encodings,
+    'binary_sequence_tensor': binary_sequence_tensor,
+    # Add other functions as needed
+}

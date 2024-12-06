@@ -8,7 +8,7 @@ from data.dataloader import WaveformDatasetPreload
 from data.sampler import RandomConsecutiveSampler
 from losses.losses import ConsecutiveDifferenceHigherOrderLossBatch, ConsecutiveDifferenceHigherOrderLoss,PairwiseDifferenceLoss
 from models import create_model
-from scripts.utils import get_max_required_length, binary_sequence_tensor, generate_sine_tensor
+from scripts.utils import get_max_required_length, binary_sequence_tensor, generate_sine_tensor, generate_sine_encodings
 from tqdm import tqdm
 
 def main():
@@ -56,6 +56,8 @@ def main():
 
     t_input = generate_sine_tensor(bits, max_len + target_pad)
     seq_t_input = generate_sine_tensor(seq_bits, seq_max_len )
+    
+    
     #print(t_input.dtype,'tinput')
     # Create the dataset
     dataset = WaveformDatasetPreload(
@@ -82,7 +84,7 @@ def main():
     dataloader = DataLoader(dataset, batch_sampler=sampler, num_workers=config['train']['num_workers'])
 
     # Initialize model, optimizer, and loss functions
-    model = create_model(config['model']).to(device)
+    model = create_model(config['model']).to(device)  
     print(model)
     optimizer = optim.Adam(model.parameters(), lr=config['train']['learning_rate'])
 
