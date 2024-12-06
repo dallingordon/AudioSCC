@@ -111,7 +111,7 @@ def main():
         for i, batch in enumerate(tqdm(dataloader, desc=f"Epoch {epoch + 1}/{num_epochs}")):
             wav_data, t_step, target, file_idx, seq_inputs = batch
             
-            wav_data, t_step, target, file_idx, seq_inputs = wav_data.to(device).to(torch.float32), t_step.to(device), target.to(device).to(torch.float32), file_idx.to(device), seq_inputs.to(device)
+            wav_data, t_step, target, file_idx, seq_inputs = wav_data.to(device), t_step.to(device), target.to(device), file_idx.to(device), seq_inputs.to(device)
             #testing pull
             # Forward pass
             bce_output, mse_output = model(seq_inputs, file_idx, t_step)

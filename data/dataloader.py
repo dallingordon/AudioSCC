@@ -106,4 +106,4 @@ class WaveformDatasetPreload(Dataset):
         if retained_len > 0:
             seq_t_adjusted[retained_len:] = 0  # Zero out the right-padded elements
         #print(wav_data.dtype, t_step.dtype)
-        return wav_data.to(torch.long), t_step.to(torch.long), target.to(torch.long), padded_file_name_integers.to(torch.long), seq_t_adjusted.to(torch.long)
+        return wav_data.to(torch.float32), t_step.to(torch.float32), target.to(torch.float32), padded_file_name_integers.to(torch.int64), seq_t_adjusted.to(torch.float32)
